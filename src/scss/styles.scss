@@ -1,0 +1,105 @@
+/* Import Partials */
+
+@import './_variables';
+
+/* --- Import Font --- */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+/* --- CSS Reset --- */
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* --- Header --- */
+
+header {
+  width: 100%;
+  padding: 2em 0em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $light-color;
+  color: $dark-color;
+  font-family: $main-font;
+}
+
+/* --- Search Form --- */
+
+.search-form {
+  width: 100%;
+  padding: 1em 0em;
+  font-family: $main-font;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 1em 0px;
+  input {
+    border: solid 2px $medium-color;
+    color: $dark-color;
+    background-color: $light-color;
+    padding: .5em;
+  }
+  button {
+    background-color: $dark-color;
+    color: #FFFFFF;
+    border: none;
+    margin-left: 1em;
+    padding: .6em;
+    font-weight: bold;
+  }
+}
+
+/* --- Places --- */
+
+#places {
+  font-family: $main-font;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+#places li {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+
+  padding: 0.5em;
+  margin: 0.5em 0em;
+  background-color: $offwhite-color;
+}
+
+/* --- Map --- */
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 5px $dark-color;
+}
+
+#map {
+  width: 500px;
+  height: 500px;
+}
+
+.map {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
