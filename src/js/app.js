@@ -2,11 +2,7 @@
 
 import '../scss/styles.scss';
 
-// Import Google Maps Loader
-
-import { Loader } from '@googlemaps/js-api-loader';
-
-// Primary Configuration for Google Maps API and Current Location Storage
+// Primary configuration for Google Maps API and current location storage
 
 const config = {
   apiKey: 'AIzaSyDQikLBYGnnSeoRauJQDQDPme9r_1DunbM',
@@ -17,135 +13,110 @@ const config = {
   },
 };
 
-// Load Initial Map
+// Loads Google Map with initial location and optional parameter for additional place markers
+
+const loadMap = (placeMarkers) => {
+  const googleMap = document.getElementById('map');
+  googleMap.innerHTML = '';
+  if (config.location.latitude && config.location.longitude != null) {
+    const map = new google.maps.Map(googleMap, {
+      center: {
+        lat: config.location.latitude,
+        lng: config.location.longitude,
+      },
+      zoom: 10,
+    });
+    const initialMarker = new google.maps.Marker({
+      position: {
+        lat: config.location.latitude,
+        lng: config.location.longitude,
+      },
+      map,
+    });
+    const infoWindow = new google.maps.InfoWindow({
+      content: '<div>Your Current Location</div>',
+    });
+    initialMarker.addListener('click', () => {
+      infoWindow.open(map, initialMarker);
+    });
+    if (placeMarkers) {
+      placeMarkers.forEach((item) => {
+        const placeMarker = new google.maps.Marker({
+          position: {
+            lat: item.geometry.location.lat,
+            lng: item.geometry.location.lng,
+          },
+          map,
+          title: item.name,
+        });
+        placeMarker.setMap(map);
+        const placeInfoWindow = new google.maps.InfoWindow({
+          content: `<div><em>${item.name}</em><br>${item.formatted_address}</div>`,
+        });
+        placeMarker.addListener('click', () => {
+          placeInfoWindow.open(map, placeMarker);
+        });
+      });
+    }
+  } else {
+    googleMap.innerHTML = '<div class="error">Unable to load map. Please enable location services in your browser.</div>';
+  }
+};
+
+// Fetch current location and load into Google Map;
 
 const initializeMap = () => {
-  const googleMap = document.getElementById('map');
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
       config.location.longitude = position.coords.longitude;
       config.location.latitude = position.coords.latitude;
     });
-
-    const initialMapLoader = new Loader({
-      apiKey: config.apiKey,
-      version: config.version,
-    });
-
-    initialMapLoader.load()
-      .then(() => {
-        const map = new google.maps.Map(googleMap, {
-          center: {
-            lat: config.location.latitude,
-            lng: config.location.longitude,
-          },
-          zoom: 10,
-        });
-        const marker = new google.maps.Marker({
-          position: {
-            lat: config.location.latitude,
-            lng: config.location.longitude,
-          },
-          map,
-        });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: '<div>Current Location</div>',
-        });
-        marker.addListener('click', () => {
-          infoWindow.open(map, marker);
-        });
-      });
+    loadMap();
   }
 };
 
-// Places Search
+// Add initializeMap to global scope
+
+window.initializeMap = initializeMap;
+
+// Get places based on search query, display on screen and load into Google Map
 
 const getPlaces = (e) => {
+  const query = document.getElementById('query');
+  const places = document.getElementById('places');
+  const placesUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query.value}&inputtype=textquery&fields=geometry,formatted_address,name,opening_hours&locationbias=circle:1000@${config.location.latitude},${config.location.longitude}&key=${config.apiKey}`;
+
   e.preventDefault();
-  const query = document.querySelector('#query');
-  const url = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query.value}&inputtype=textquery&fields=geometry,formatted_address,name,opening_hours&locationbias=circle:1000@${config.location.latitude},${config.location.longitude}&key=${config.apiKey}`;
-  fetch(url)
+
+  fetch(placesUrl)
     .then((res) => res.json())
     .then((data) => {
-      const places = document.querySelector('#places');
+      loadMap(data.candidates);
+
       data.candidates.forEach((item) => {
         const {
           name,
           formatted_address,
           opening_hours,
         } = item;
-
         let openNow;
-
         if (opening_hours.open_now && opening_hours.open_now != null) {
           openNow = 'Yes';
         } else {
           openNow = 'No';
         }
-
         const place = document.createElement('li');
-
         place.innerHTML = `
           <div>${name}</div>
           <div>${formatted_address}</div>
           <div>Open Now: ${openNow}</div>
         `;
-
         places.appendChild(place);
-      });
-      const newMapLoader = new Loader({
-        apiKey: config.apiKey,
-        version: config.version,
-      });
-
-      const googleMap = document.getElementById('map');
-      googleMap.innerHTML = '';
-
-      newMapLoader.load().then(() => {
-        const map = new google.maps.Map(googleMap, {
-          center: {
-            lat: config.location.latitude,
-            lng: config.location.longitude,
-          },
-          zoom: 10,
-        });
-        const currentLocation = new google.maps.Marker({
-          position: {
-            lat: config.location.latitude,
-            lng: config.location.longitude,
-          },
-          map,
-          title: 'Current Location',
-        });
-        const infoWindow = new google.maps.InfoWindow({
-          content: '<div>Current Location</div>',
-        });
-        currentLocation.addListener('click', () => {
-          infoWindow.open(map, currentLocation);
-        });
-        data.candidates.forEach((item) => {
-          const placeMarker = new google.maps.Marker({
-            position: {
-              lat: item.geometry.location.lat,
-              lng: item.geometry.location.lng,
-            },
-            map,
-            title: item.name,
-          });
-          placeMarker.setMap(map);
-          const placeInfoWindow = new google.maps.InfoWindow({
-            content: `<div><em>${item.name}</em><br>${item.formatted_address}</div>`,
-          });
-          placeMarker.addListener('click', () => {
-            placeInfoWindow.open(map, placeMarker);
-          });
-        });
       });
     });
 };
 
-const submitBtn = document.querySelector('#submit');
+const submitBtn = document.getElementById('submit');
 
 // Returns restaurants based on query
 

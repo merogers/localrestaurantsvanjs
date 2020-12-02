@@ -16,6 +16,7 @@
 
 html, body {
   height: 100%;
+  min-width: 520px;
 }
 
 /* --- Header --- */
@@ -80,6 +81,7 @@ header {
   padding: 0.5em;
   margin: 0.5em 0em;
   background-color: $offwhite-color;
+  border: solid 5px $dark-color;
 }
 
 /* --- Map --- */
@@ -101,5 +103,19 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.error {
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: $main-font;
+  font-weight: bold;
+  height: 100%;
+  width: 100%;
+  background-color: $error-color;
+  padding: 1em;
 }
 

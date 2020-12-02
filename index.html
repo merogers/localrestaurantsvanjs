@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local Restaurants App</title>
+  <title>Local Restaurants</title>
 </head>
 <body>
   <header>
-    <h1>Local Restaurants App</h1>
+    <h1>Local Restaurants</h1>
   </header>
   <form class="search-form">
-    <input type="text" placeholder="Search Query..." id="query">
+    <input type="text" placeholder="Search for restaurants..." id="query">
     <button type="submit" id="submit">Search</button>
   </form>
   <ul id="places"></ul>
@@ -19,5 +19,9 @@
       <div id="map"></div>
     </div>
   </div>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQikLBYGnnSeoRauJQDQDPme9r_1DunbM&callback=initializeMap&libraries=&v=weekly"
+  defer
+></script>
 </body>
 </html>
