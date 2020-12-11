@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/merogers/weathersplash.git"
+    "url": "https://github.com/merogers/localrestaurantsvanjs.git"
   },
   "author": "Michelle Rogers <michelle@merogers.dev> (https://merogers.dev)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/merogers/weathersplash/issues"
+    "url": "https://github.com/merogers/localrestaurantsvanjs/issues"
   },
-  "homepage": "https://github.com/merogers/weathersplash#readme",
+  "homepage": "https://github.com/merogers/localrestaurantsvanjs#readme",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",

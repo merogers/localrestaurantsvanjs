@@ -64,5 +64,8 @@ module.exports = {
       chunkFilename: 'css/[id].css',
     }),
     new Dotenv(),
+    new webpack.DefinePlugin({
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY || 'production'),
+    }),
   ],
 };
