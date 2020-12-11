@@ -92,7 +92,7 @@ const getPlaces = (e) => {
 
   const messages = document.getElementById('messages');
 
-  const placesUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query.value}&inputtype=textquery&fields=geometry,formatted_address,name,opening_hours&locationbias=circle:1000@${location.latitude},${location.longitude}&key=${process.env.API_KEY}`;
+  const placesUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query.value}&inputtype=textquery&fields=geometry,formatted_address,name,opening_hours&locationbias=circle:1000@${location.latitude},${location.longitude}&key=${process.env.API_KEY}`;
 
   e.preventDefault();
 
